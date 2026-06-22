@@ -48,13 +48,13 @@ public class ProductService {
     }
 
     public ProductResponse createProduct(CreateProductRequest request){
-        Product product = new Product();
-        product.setName(request.name());
-        product.setDescription(request.description());
-        product.setPrice(request.price());
-        product.setCategory(request.category());
-        Product saved = repository.save(product);
-        return toResponse(saved);
+        Product product = Product.builder()
+                .name(request.name())
+                .price(request.price())
+                .category(request.category())
+                .description(request.description())
+                .build();
+        return toResponse(product);
     }
 
     public void delete(Long id){
