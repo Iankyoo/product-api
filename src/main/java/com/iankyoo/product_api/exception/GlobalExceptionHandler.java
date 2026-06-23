@@ -21,6 +21,13 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(ex.getMessage()));
     }
 
+    @ExceptionHandler(UserNotFoundException.class)
+    public  ResponseEntity<ErrorResponse> userNotFoundHandler(UserNotFoundException ex){
+        log.warn(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(ex.getMessage()));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> methodArgumentsNotValid(MethodArgumentNotValidException ex) {
         log.error("Method argument not valid");
