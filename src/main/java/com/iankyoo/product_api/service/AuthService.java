@@ -5,6 +5,7 @@ import com.iankyoo.product_api.dto.LoginRequest;
 import com.iankyoo.product_api.dto.RegisterRequest;
 import com.iankyoo.product_api.entity.Role;
 import com.iankyoo.product_api.entity.User;
+import com.iankyoo.product_api.exception.InvalidCredentialsException;
 import com.iankyoo.product_api.exception.UserNotFoundException;
 import com.iankyoo.product_api.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,7 +41,7 @@ public class AuthService {
                 .orElseThrow(() -> new UserNotFoundException(request.email()));
 
         if (!passwordEncoder.matches(request.password(), user.getPassword())){
-            throw new RuntimeException("Invalid credentials");
+            throw new InvalidCredentialsException();
         }
 
         String token = jwtService.generateToken(user);

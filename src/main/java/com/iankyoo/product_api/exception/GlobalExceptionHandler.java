@@ -22,9 +22,16 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public  ResponseEntity<ErrorResponse> userNotFoundHandler(UserNotFoundException ex){
+    public ResponseEntity<ErrorResponse> userNotFoundHandler(UserNotFoundException ex){
         log.warn(ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ErrorResponse> invalidCredentialsHandler(InvalidCredentialsException ex){
+        log.warn(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new ErrorResponse(ex.getMessage()));
     }
 
