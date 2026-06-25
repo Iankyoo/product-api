@@ -8,11 +8,14 @@ import com.iankyoo.product_api.entity.User;
 import com.iankyoo.product_api.exception.InvalidCredentialsException;
 import com.iankyoo.product_api.exception.UserNotFoundException;
 import com.iankyoo.product_api.repository.UserRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthService {
+public class AuthService implements UserDetailsService {
 
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
@@ -46,5 +49,11 @@ public class AuthService {
 
         String token = jwtService.generateToken(user);
         return new AuthResponse(token);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return repository.findByEmail(username)
+                .orElseThrow(()-> new UserNotFoundException(username));
     }
 }
